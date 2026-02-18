@@ -8,10 +8,10 @@ app.use(express.json());
 
 const PORT = 5000;
 
-// Load Data
+
 let data = JSON.parse(fs.readFileSync("data.json"));
 
-// Register
+
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
 
@@ -29,7 +29,6 @@ app.post("/register", (req, res) => {
   res.json("Registered");
 });
 
-// Login
 app.post("/login", (req, res) => {
 
   const { email, password } = req.body;
@@ -43,7 +42,7 @@ app.post("/login", (req, res) => {
   res.json(user);
 });
 
-// Update Progress
+
 app.post("/progress", (req, res) => {
 
   const { email, progress } = req.body;
@@ -65,3 +64,4 @@ function save() {
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
+
