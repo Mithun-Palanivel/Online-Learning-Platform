@@ -128,8 +128,6 @@
 <header>Online Learning Platform</header>
 
 <div class="container">
-
-<!-- LOGIN -->
 <div id="auth" class="auth-box">
   <h2>Student Login</h2>
 
@@ -141,7 +139,6 @@
 </div>
 
 
-<!-- COURSE LIST -->
 <div id="courses" class="hidden">
 
   <h3>Welcome, <span id="user"></span></h3>
@@ -155,7 +152,6 @@
 </div>
 
 
-<!-- LEARNING PAGE -->
 <div id="learning" class="hidden">
 
   <h3 id="courseTitle"></h3>
@@ -196,7 +192,7 @@
 
 <script>
 
-// ---------------- COURSES ----------------
+
 
 const courses = [
 
@@ -232,13 +228,13 @@ const courses = [
 
 ];
 
-// ---------------- VARIABLES ----------------
+
 
 let userEmail="";
 let current=0;
 let progress=0;
 
-// ---------------- AUTH ----------------
+
 
 async function register(){
 
@@ -279,7 +275,7 @@ function logout(){
   learning.classList.add("hidden");
 }
 
-// ---------------- COURSES ----------------
+
 
 const coursesDiv=document.getElementById("courses");
 
@@ -310,7 +306,6 @@ function openCourse(i){
   loadCourse();
 }
 
-// ---------------- LEARNING ----------------
 
 function loadCourse(){
 
@@ -369,4 +364,5 @@ function backToCourses(){
 </script>
 
 </body>
+
 </html>
