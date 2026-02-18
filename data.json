@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "email": "mthunhar663@gmal.com",
+      "password": "Mthun23#",
+      "progress": 0
+    },
+    {
+      "email": "mithunhari663@gmail.com",
+      "password": "Mithun23",
+      "progress": 0
+    },
+    {
+      "email": "mithun",
+      "password": "1234",
+      "progress": 0
+    }
+  ]
+}

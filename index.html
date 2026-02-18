@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Learning Platform</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      margin:0;
+      background:linear-gradient(120deg,#2563eb,#38bdf8);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .app{
+      width:100%;
+      max-width:1100px;
+      background:white;
+      border-radius:15px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.2);
+      overflow:hidden;
+    }
+
+    header{
+      background:#1e40af;
+      color:white;
+      padding:20px;
+      text-align:center;
+      font-size:24px;
+      font-weight:600;
+    }
+
+    .container{
+      padding:30px;
+    }
+
+    h2,h3,h4{
+      margin-top:0;
+      color:#1e293b;
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+      margin:8px 0;
+      border:1px solid #cbd5e1;
+      border-radius:8px;
+      font-size:15px;
+    }
+
+    button{
+      padding:12px;
+      border:none;
+      border-radius:8px;
+      background:#2563eb;
+      color:white;
+      font-size:15px;
+      cursor:pointer;
+      transition:0.3s;
+      width:100%;
+      margin-top:10px;
+    }
+
+    button:hover{background:#1e40af;}
+
+    .btn-dark{background:#0f172a;}
+    .btn-dark:hover{background:#020617;}
+
+    .hidden{display:none;}
+
+    .auth-box{
+      max-width:400px;
+      margin:auto;
+      text-align:center;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:20px;
+    }
+
+    .card{
+      background:#f8fafc;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.08);
+      transition:0.3s;
+    }
+
+    .card:hover{transform:translateY(-5px);}
+
+    video{
+      width:100%;
+      border-radius:10px;
+      margin:10px 0;
+    }
+
+    progress{
+      width:100%;
+      height:18px;
+    }
+
+    footer{
+      background:#f1f5f9;
+      text-align:center;
+      padding:12px;
+      color:#64748b;
+      font-size:13px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+<header>Online Learning Platform</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="auth" class="auth-box">
+  <h2>Student Login</h2>
+
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="register()">Register</button>
+  <button class="btn-dark" onclick="login()">Login</button>
+</div>
+
+
+<!-- COURSE LIST -->
+<div id="courses" class="hidden">
+
+  <h3>Welcome, <span id="user"></span></h3>
+  <h4>Select a Course</h4>
+
+  <div class="grid" id="courseList"></div>
+
+  <br>
+  <button class="btn-dark" onclick="logout()">Logout</button>
+
+</div>
+
+
+<!-- LEARNING PAGE -->
+<div id="learning" class="hidden">
+
+  <h3 id="courseTitle"></h3>
+
+  <iframe id="courseVideo" width="100%" height="315" allowfullscreen></iframe>
+
+
+  <button onclick="completeVideo()">Complete Video</button>
+
+  <div class="card">
+
+    <h4>Quiz</h4>
+
+    <p id="quizQ"></p>
+
+    <label><input type="radio" name="q" value="1"> <span id="opt1"></span></label><br>
+    <label><input type="radio" name="q" value="0"> <span id="opt2"></span></label><br>
+
+    <button onclick="submitQuiz()">Submit Quiz</button>
+
+  </div>
+
+  <div class="card">
+    <h4>Progress</h4>
+    <progress id="bar" max="100" value="0"></progress>
+    <p id="text">0%</p>
+  </div>
+
+  <button class="btn-dark" onclick="backToCourses()">Back to Courses</button>
+
+</div>
+
+</div>
+
+<footer>© 2026 Internship Project</footer>
+
+</div>
+
+<script>
+
+// ---------------- COURSES ----------------
+
+const courses = [
+
+{ title:"HTML Basics", video:"https://youtu.be/G3e-cpL7ofc?si=8pvahknxUqoXjkgt",
+  q:"HTML stands for?", o1:"Hyper Text Markup Language", o2:"High Tool Markup", ans:1 },
+
+{ title:"CSS Fundamentals", video:"https://youtu.be/vfs1wBDoqBY?si=RpNvlDIsWlnVJV6T",
+  q:"CSS is used for?", o1:"Styling", o2:"Database", ans:1 },
+
+{ title:"JavaScript Intro", video:"https://youtu.be/EerdGm-ehJQ?si=MzQzKaFTyTgA-VZn",
+  q:"JS is a?", o1:"Programming Language", o2:"Browser", ans:1 },
+
+{ title:"Python Basics", video:"https://youtu.be/m67-bOpOoPU?si=lMLQK5VUIpVxHQCC",
+  q:"Python is?", o1:"Language", o2:"Hardware", ans:1 },
+
+{ title:"C Programming", video:"https://youtu.be/xDHSP_hyWJA?si=XFvg_2408eaS43vR",
+  q:"C is?", o1:"Low Level", o2:"OS", ans:1 },
+
+{ title:"Java Basics", video:"https://youtu.be/xTtL8E4LzTQ?si=rdWLWqV3ubJcUifh",
+  q:"Java runs on?", o1:"JVM", o2:"RAM", ans:1 },
+
+{ title:"Web Design", video:"https://youtu.be/jPyOlfVaXKM?si=VnOjF0EaIaZxFUbl",
+  q:"UX means?", o1:"User Experience", o2:"User Exit", ans:1 },
+
+{ title:"Data Structures", video:"https://youtu.be/iaB-gysl6Fc?si=4Z19ibInLAjIxBQe",
+  q:"Stack follows?", o1:"LIFO", o2:"FIFO", ans:1 },
+
+{ title:"DBMS", video:"https://youtu.be/mDFXzRBpJTI?si=R_WsH0nGk7ecbRJc",
+  q:"SQL is for?", o1:"Database", o2:"Design", ans:1 },
+
+{ title:"Cyber Security", video:"https://www.youtube.com/live/lpa8uy4DyMo?si=7lAVy79r-v1DdVrK",
+  q:"Firewall is?", o1:"Security", o2:"Virus", ans:1 }
+
+];
+
+// ---------------- VARIABLES ----------------
+
+let userEmail="";
+let current=0;
+let progress=0;
+
+// ---------------- AUTH ----------------
+
+async function register(){
+
+  await fetch("http://localhost:5000/register",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:email.value,password:password.value})
+  });
+
+  alert("Registered Successfully");
+}
+
+async function login(){
+
+  const res = await fetch("http://localhost:5000/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:email.value,password:password.value})
+  });
+
+  const data = await res.json();
+
+  if(!data) return alert("Login Failed");
+
+  userEmail=data.email;
+
+  auth.classList.add("hidden");
+  coursesDiv.classList.remove("hidden");
+
+  user.innerText=userEmail;
+  loadCourses();
+}
+
+function logout(){
+
+  auth.classList.remove("hidden");
+  coursesDiv.classList.add("hidden");
+  learning.classList.add("hidden");
+}
+
+// ---------------- COURSES ----------------
+
+const coursesDiv=document.getElementById("courses");
+
+function loadCourses(){
+
+  const list=document.getElementById("courseList");
+  list.innerHTML="";
+
+  courses.forEach((c,i)=>{
+
+    const div=document.createElement("div");
+    div.className="card";
+
+    div.innerHTML=`<h4>${c.title}</h4><p>Click to start</p><button onclick='openCourse(${i})'>Start</button>`;
+
+    list.appendChild(div);
+  });
+}
+
+function openCourse(i){
+
+  current=i;
+  progress=0;
+
+  coursesDiv.classList.add("hidden");
+  learning.classList.remove("hidden");
+
+  loadCourse();
+}
+
+// ---------------- LEARNING ----------------
+
+function loadCourse(){
+
+  const c=courses[current];
+
+  courseTitle.innerText=c.title;
+  courseVideo.src=c.video;
+
+  quizQ.innerText=c.q;
+  opt1.innerText=c.o1;
+  opt2.innerText=c.o2;
+
+  update();
+}
+
+function completeVideo(){
+
+  if(progress<50){
+    progress=50;
+    update();
+    alert("Video Completed");
+  }
+}
+
+function submitQuiz(){
+
+  const q=document.querySelector('input[name="q"]:checked');
+
+  if(!q) return alert("Select answer");
+
+  if(Number(q.value)===courses[current].ans){
+
+    if(progress<100){
+      progress=100;
+      update();
+      alert("Correct Answer");
+    }
+  }
+  else{
+    alert("Wrong Answer");
+  }
+}
+
+function update(){
+
+  bar.value=progress;
+  text.innerText=progress+"% Completed";
+}
+
+function backToCourses(){
+
+  learning.classList.add("hidden");
+  coursesDiv.classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
